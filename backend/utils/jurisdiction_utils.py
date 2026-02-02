@@ -1,6 +1,3 @@
-"""
-Utility functions for government jurisdiction assignment
-"""
 
 from db.supabase import supabase
 from middleware.logging import logger

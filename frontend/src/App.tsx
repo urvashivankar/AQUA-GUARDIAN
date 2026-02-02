@@ -21,7 +21,7 @@ import CommunityActivities from "./pages/CommunityActivities";
 import Leaderboard from "./pages/Leaderboard";
 import NotFound from "./pages/NotFound";
 import ReportDetail from "./pages/ReportDetail";
-import DemoSeeder from "./pages/DemoSeeder";
+
 
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
@@ -54,7 +54,7 @@ const App = () => (
                 <Route path="/community-action" element={<CommunityActivities />} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/report/:id" element={<ReportDetail />} />
-                <Route path="/setup-demo" element={<DemoSeeder />} />
+
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

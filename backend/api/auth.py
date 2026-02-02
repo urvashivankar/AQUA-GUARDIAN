@@ -19,18 +19,15 @@ def register(user: UserCredentials):
     logger.info(f"🔵 REGISTRATION START - Email: {user.email}")
     logger.info(f"🎭 ROLE RECEIVED: '{user.role}' (type: {type(user.role).__name__})")
     
-    # Validate email format
     email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
     if not re.match(email_pattern, user.email):
         logger.warning(f"Invalid email format: {user.email}")
         raise HTTPException(status_code=400, detail="Invalid email format")
     
-    # Validate password strength
     if len(user.password) < 6:
         logger.warning(f"Password too short for: {user.email}")
         raise HTTPException(status_code=400, detail="Password must be at least 6 characters long")
     
-    # Validate Role (case-insensitive)
     valid_roles = ["citizen", "ngo", "government", "student", "other"]
     role_lower = user.role.lower()
     logger.info(f"🔍 Role validation - Input: '{user.role}' -> Lowercase: '{role_lower}'")
@@ -40,7 +37,6 @@ def register(user: UserCredentials):
         raise HTTPException(status_code=400, detail=f"Invalid role. Must be one of {valid_roles}")
 
     try:
-        # Supabase Auth Sign Up
         logger.info(f"📤 Sending to Supabase - Role: '{role_lower}'")
         res = supabase.auth.sign_up({
             "email": user.email,
@@ -48,7 +44,7 @@ def register(user: UserCredentials):
             "options": {
                 "data": {
                     "name": user.name,
-                    "role": role_lower  # Store lowercase for consistency
+                    "role": role_lower  
                 }
             }
         })
@@ -59,29 +55,25 @@ def register(user: UserCredentials):
         
         logger.info(f"✅ Supabase user created - ID: {res.user.id}")
         
-        # Create public profile entry (UPSERT to handle existing users)
         try:
             profile_data = {
                 "id": res.user.id,
                 "email": res.user.email,
                 "full_name": user.name,
-                "role": role_lower  # CRITICAL: Store lowercase role
+                "role": role_lower  
             }
             logger.info(f"💾 Upserting profile - Role: '{role_lower}'")
             
-            # UPSERT: Insert or update if exists
             supabase.table("users").upsert(profile_data, on_conflict="id").execute()
             logger.info(f"✅ Profile upserted for: {user.email} with role: {role_lower}")
             
         except Exception as profile_err:
             logger.error(f"❌ Profile upsert failed for {user.email}: {profile_err}")
-            # Don't fail registration, just log the error
         
         logger.info(f"Registration successful for: {user.email}")
         logger.info(f"   User ID: {res.user.id}")
         logger.info(f"   Email confirmed: {res.user.email_confirmed_at is not None}")
         
-        # Return formatted response
         return {
             "success": True,
             "message": "Registration successful. Please check your email to confirm your account." if not res.user.email_confirmed_at else "Registration successful!",
@@ -103,7 +95,6 @@ def register(user: UserCredentials):
     except Exception as e:
         error_str = str(e).lower()
         
-        # Handle specific error cases
         if "user already registered" in error_str or "already exists" in error_str or "duplicate" in error_str:
             logger.warning(f"Duplicate email attempt: {user.email}")
             raise HTTPException(status_code=400, detail=f"A user with email {user.email} already exists. Please login instead.")
@@ -140,7 +131,6 @@ def login(user: UserCredentials):
         logger.info(f"Login successful for: {user.email}")
         logger.info(f"   User ID: {res.user.id}")
         
-        # Return formatted response
         return {
             "success": True,
             "message": "Login successful",
@@ -161,7 +151,6 @@ def login(user: UserCredentials):
     except Exception as e:
         error_str = str(e).lower()
         
-        # Handle specific error cases
         if "invalid" in error_str and ("credentials" in error_str or "password" in error_str or "email" in error_str):
             logger.warning(f"Invalid credentials for: {user.email}")
             raise HTTPException(status_code=401, detail="Invalid email or password")

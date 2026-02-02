@@ -1,7 +1,4 @@
-"""
-AQUA Guardian API - Main Application
-Production-ready FastAPI application with security hardening.
-"""
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -12,10 +9,8 @@ import os
 from datetime import datetime
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
 
-# Import middleware (create __init__.py files if needed)
 try:
     from middleware.security import SecurityMiddleware, RateLimitMiddleware
     from middleware.logging import LoggingMiddleware
@@ -24,7 +19,6 @@ except ImportError:
     logger.warning("Middleware not available. Running without security hardening.")
     MIDDLEWARE_AVAILABLE = False
 
-# App configuration
 app = FastAPI(
     title="AQUA Guardian API",
     description="AI-Powered Water Pollution Monitoring & Reporting System",
@@ -33,16 +27,12 @@ app = FastAPI(
     redoc_url="/redoc" if os.getenv("ENVIRONMENT") != "production" else None
 )
 
-# CORS Configuration
-# In production, use specific origins. In development, allow all.
 environment = os.getenv("ENVIRONMENT", "development")
 allowed_origins_str = os.getenv("ALLOWED_ORIGINS", "")
 
 if environment == "production" and allowed_origins_str:
-    # Production: Use specific allowed origins
     allowed_origins = [origin.strip() for origin in allowed_origins_str.split(",") if origin.strip()]
 else:
-    # Development: Allow all origins
     allowed_origins = ["*"]
 
 logger.info(f"CORS Configuration: Environment={environment}, Allowed Origins={allowed_origins}")
@@ -54,17 +44,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Add production middleware
 if MIDDLEWARE_AVAILABLE:
     app.add_middleware(SecurityMiddleware)
     app.add_middleware(RateLimitMiddleware, requests_per_minute=60)
     app.add_middleware(LoggingMiddleware)
 
-# Exception handlers
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
-    """Global exception handler for unhandled errors."""
     return JSONResponse(
         status_code=500,
         content={
@@ -74,7 +60,6 @@ async def global_exception_handler(request: Request, exc: Exception):
         }
     )
 
-# Health check endpoint
 @app.get("/health")
 def health_check():
     """Health check endpoint for monitoring."""
@@ -85,7 +70,6 @@ def health_check():
     }
 
 
-# API Routes
 from api.gamification import router as gamification_router
 from api.notifications import router as notifications_router
 
@@ -100,9 +84,8 @@ app.include_router(notifications_router, prefix="/api/notifications", tags=["Pus
 
 @app.get("/")
 def root():
-    """Root endpoint with API information."""
     return {
-        "message": "🌊 AQUA Guardian API is running",
+        "message": " AQUA Guardian API is running",
         "version": "1.0.0",
         "description": "AI-Powered Water Pollution Monitoring & Reporting System",
         "docs": "/docs" if os.getenv("ENVIRONMENT") != "production" else "Documentation disabled in production",
@@ -116,24 +99,19 @@ def root():
         }
     }
 
-# Startup event
 @app.on_event("startup")
 async def startup_event():
-    """Run on application startup."""
     logger.info("=" * 60)
     logger.info("AQUA Guardian API Starting...")
     logger.info("=" * 60)
     logger.info(f"Environment: {os.getenv('ENVIRONMENT', 'development')}")
     logger.info(f"Security Middleware: {'Enabled' if MIDDLEWARE_AVAILABLE else 'Disabled'}")
     
-    # ML Model is pre-loaded to eliminate first-request latency for users
     get_shared_model() 
-    logger.info("✅ ML Model pre-loaded successfully. Ready for instant inference.")
+    logger.info(" ML Model pre-loaded successfully. Ready for instant inference.")
         
     logger.info("=" * 60)
 
-# Shutdown event
 @app.on_event("shutdown")
 async def shutdown_event():
-    """Run on application shutdown."""
     logger.info("AQUA Guardian API Shutting down...")

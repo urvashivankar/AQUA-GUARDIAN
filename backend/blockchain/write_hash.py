@@ -10,18 +10,12 @@ except (ImportError, EnvironmentError):
     BLOCKCHAIN_AVAILABLE = False
 
 def generate_hash(data: dict) -> str:
-    """Generates SHA256 hash of the report data for integrity verification.
-    Returns a hex string prefixed with 0x.
-    """
-    # Use deterministic serialization
     serialized = json.dumps(data, sort_keys=True, default=str).encode('utf-8')
     hash_hex = hashlib.sha256(serialized).hexdigest()
     return f"0x{hash_hex}"
 
 def generate_location_hash(lat: float, lng: float) -> str:
-    """Generates a privacy-preserving hash of the location coordinates.
-    """
-    coord_str = f"{lat:.4f},{lng:.4f}" # Round to ~11m precision for hashing
+    coord_str = f"{lat:.4f},{lng:.4f}"
     hash_hex = hashlib.sha256(coord_str.encode('utf-8')).hexdigest()
     return f"0x{hash_hex}"
 
@@ -32,9 +26,7 @@ def write_hash_to_chain(
     reviewer_decision: str, 
     location_hash: str
 ) -> Optional[str]:
-    """Writes the report metadata to the blockchain.
-    Returns the transaction hash as a hex string.
-    """
+   
     if not BLOCKCHAIN_AVAILABLE:
         return None
 

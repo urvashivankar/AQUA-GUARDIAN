@@ -17,7 +17,6 @@ def start_cleanup(
     
     logger.info(f"Cleanup START Request - Report: {report_id}, Actor: {actor_id} ({user_role})")
     
-    # 1. SAFETY FIREWALL: Check Report Severity
     try:
         report_res = supabase.table("reports").select("severity").eq("id", report_id).execute()
         if not report_res.data:
@@ -25,23 +24,14 @@ def start_cleanup(
              
         severity = report_res.data[0].get("severity", 0)
         
-        # If High/Critical (8-10) and NOT Gov -> BLOCK
         if severity >= 8 and user_role != "government":
-            # RELAXED FOR DEMO/USER REQUEST: Log warning instead of blocking
             logger.warning(f"SAFETY ALERT: NGO {current_user.email} starting High-Severity ({severity}) cleanup.")
-            # raise HTTPException(
-            #    status_code=403, 
-            #    detail="SAFETY PROTOCOL: High-severity incidents require HAZMAT clearance. Restricted to Government agencies only."
-            # )
+           
     except HTTPException as he:
         raise he
     except Exception as e:
         logger.error(f"Firewall check failed: {e}")
-        # If we can't check severity, safely proceed or fail? Proceed for now but log.
-
-    # 2. Upsert cleanup action
-    # We use report_id as a key to prevent multiple cleanup actions for the same report?
-    # Usually cleanup_actions has its own ID. Let's check if there's an existing one.
+       
     existing = supabase.table("cleanup_actions").select("id").eq("report_id", report_id).execute()
     
     cleanup_payload = {
@@ -62,7 +52,6 @@ def start_cleanup(
     if not res.data:
         raise HTTPException(status_code=500, detail="Database failure while starting cleanup drive.")
 
-    # 3. Update report status to Resolution in Progress
     supabase.table("reports").update({"status": "Resolution in Progress"}).eq("id", report_id).execute()
 
     return res.data[0]
@@ -113,23 +102,19 @@ async def update_cleanup(
 
     res = supabase.table("cleanup_actions").update(update_payload).eq("id", cleanup_id).execute()
     
-    # Also update the report status and MINT NFT if 100%
     if progress == 100 and res.data:
         cleanup_data = res.data[0]
         report_id = cleanup_data["report_id"]
         actor_id = cleanup_data["actor_id"]
         
-        # 1. Update report status
         supabase.table("reports").update({"status": "Action completed"}).eq("id", report_id).execute()
         
-        # 2. Trigger NFT Minting for the actor
         try:
             user_res = supabase.table("users").select("wallet_address").eq("id", actor_id).execute()
             if user_res.data and user_res.data[0].get("wallet_address"):
                 wallet = user_res.data[0]["wallet_address"]
                 from blockchain.contract_interface import mint_contribution_proof
                 
-                # Metadata for the cleanup completion
                 metadata_uri = f"https://api.aquaguardian.org/metadata/cleanup/{cleanup_id}"
                 
                 token_id, nft_tx = mint_contribution_proof(wallet, metadata_uri)
@@ -154,15 +139,11 @@ def create_campaign(
     current_user = Depends(get_current_user)
 ):
     actor_id = current_user.id
-    """Create a new cleanup campaign from scratch (implicitly creates a report)."""
     
-    # 1. Create a placeholder Report
-    # We use a default image or placeholder if none provided.
     report_data = {
-        # "location" and "type" are not in the DB schema for reports
         "latitude": 0.0, 
         "longitude": 0.0,
-        "severity": 1, # Low severity for planned events
+        "severity": 1, 
         "description": f"CAMPAIGN: {title} @ {location}. {description}",
         "status": "Verified",
         "user_id": actor_id,
@@ -181,14 +162,12 @@ def create_campaign(
         
     report_id = rep_res.data[0]["id"]
     
-    # Insert Placeholder Photo
     photo_url = "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?q=80&w=600&auto=format&fit=crop"
     supabase.table("photos").insert({
         "report_id": report_id,
         "url": photo_url
     }).execute()
 
-    # 2. Create Cleanup Action
     res = supabase.table("cleanup_actions").insert({
         "report_id": report_id,
         "actor_id": actor_id,
@@ -202,6 +181,5 @@ def create_campaign(
 @router.get("/active")
 def get_active_cleanups():
     """Get all active cleanup activities for the public board."""
-    # Join with reports to get location/type
     res = supabase.table("cleanup_actions").select("*, reports(*)").neq("status", "archived").execute()
     return res.data

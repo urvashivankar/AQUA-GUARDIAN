@@ -15,7 +15,6 @@ def get_water_quality():
     Returns None if no readings exist.
     """
     try:
-        # Get the most recent reading
         result = supabase.table("water_quality_readings").select("*").order("recorded_at", desc=True).limit(1).execute()
         
         if result.data and len(result.data) > 0:
@@ -28,7 +27,6 @@ def get_water_quality():
                 "temperature": float(reading["temperature"])
             }
         else:
-            # Return None when no readings exist - frontend will handle empty state
             return None
     except Exception as e:
         print(f"Error fetching water quality: {e}")
@@ -110,7 +108,6 @@ def get_marine_impact():
     Returns marine impact metrics.
     Returns empty array until real data is available.
     """
-    # TODO: Calculate from real database metrics when available
     return []
 
 @router.get("/success-stories")
@@ -675,7 +672,7 @@ def get_trend_comparison(months: int = 6):
                     "month": month_key,
                     "reports": 0,
                     "resolved": 0,
-                    "avgResponseTime": None  # TODO: Calculate from real timestamps
+                    "avgResponseTime": None
                 }
             
             monthly_data[month_key]["reports"] += 1
@@ -697,8 +694,6 @@ def get_marine_impact_metrics():
     Returns empty object until real data is available.
     """
     try:
-        # TODO: Calculate real marine impact metrics from database
-        # For now, return empty structure
         return {
             "species_impact": [
                 { "species": "Irrawaddy Dolphin", "conservationStatus": "Endangered", "currentPopulation": 145, "projectedChange": 5, "threats": ["Net Entanglement", "Pollution"] },

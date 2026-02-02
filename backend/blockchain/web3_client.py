@@ -4,7 +4,6 @@ from web3 import Web3
 
 load_dotenv()
 
-# Load RPC URL and private key from environment variables
 RPC_URL = os.getenv('BLOCKCHAIN_RPC_URL') or os.getenv('WEB3_PROVIDER_URL')
 PRIVATE_KEY = os.getenv('BLOCKCHAIN_PRIVATE_KEY') or os.getenv('DEPLOYER_PRIVATE_KEY') or os.getenv('PRIVATE_KEY')
 

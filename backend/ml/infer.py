@@ -9,8 +9,6 @@ except ImportError:
     import logging
     logger = logging.getLogger(__name__)
 
-# Initialize Groq client
-# Note: In production, ensure GROQ_API_KEY is set in environment variables
 _client = None
 
 def get_client():
@@ -26,10 +24,7 @@ def encode_image(image_bytes):
     return base64.b64encode(image_bytes).decode('utf-8')
 
 def predict_image(image_bytes, demo_mode=True, description=""):
-    """
-    Inference using Groq Llama 3.2 Vision Model.
-    Provides better accuracy and detailed pollution analysis.
-    """
+    
     try:
         client = get_client()
         base64_image = encode_image(image_bytes)
@@ -76,14 +71,11 @@ def predict_image(image_bytes, demo_mode=True, description=""):
                 }
             ],
             model="meta-llama/llama-4-maverick-17b-128e-instruct",
-            # Note: response_format={"type": "json_object"} sometimes fails with vision on Groq
-            # We will rely on prompt enforcement and manual parsing if needed.
         )
 
         response_content = chat_completion.choices[0].message.content
         logger.debug(f"Raw Groq Response: {response_content}")
         
-        # Robust JSON extraction (Llama 4 often wraps in markdown)
         import re
         json_match = re.search(r'\{.*\}', response_content, re.DOTALL)
         if json_match:
@@ -109,6 +101,5 @@ def predict_image(image_bytes, demo_mode=True, description=""):
         return {"class": "unknown", "confidence": 0.0}
 
 def get_shared_model():
-    """Maintained for compatibility with main.py pre-loading logic."""
-    logger.info("⚡ Groq Vision API Integration Initialized.")
+    logger.info(" Groq Vision API Integration Initialized.")
     return "GROQ_ACTIVE"
