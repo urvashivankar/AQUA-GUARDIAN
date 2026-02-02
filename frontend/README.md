@@ -1,73 +1,54 @@
-# Welcome to your Lovable project
+# AQUA Guardian - Frontend UI
 
-## Project info
+The user interface for the AQUA Guardian pollution monitoring system. Built with modern web technologies for a premium, fast, and responsive experience.
 
-**URL**: https://lovable.dev/projects/88e1c9ac-1089-4716-bae0-c4bd919eaae8
+## Features
 
-## How can I edit this code?
+- 📱 **Responsive Dashboard**: Real-time analytics for water quality and pollution reports.
+- 🤖 **AI Report Submission**: Seamless interface for uploading photos for instant AI classification.
+- 🗺️ **Interactive Maps**: Geographic visualization of pollution hotspots and severity.
+- 🏆 **Gamification**: Leaderboards and contribute rewards for active citizens.
+- 🏛️ **Multi-Role Access**: Specialized dashboards for Citizens, NGOs, and Government authorities.
 
-There are several ways of editing your application.
+## Tech Stack
 
-**Use Lovable**
+- **Framework**: React 18 with Vite
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS & Framer Motion (animations)
+- **UI Components**: shadcn/ui
+- **State Management**: React Query (TanStack Query)
+- **Auth & Database**: Supabase
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/88e1c9ac-1089-4716-bae0-c4bd919eaae8) and start prompting.
+## Getting Started
 
-Changes made via Lovable will be committed automatically to this repo.
+### 1. Install Dependencies
+```bash
+npm install
+```
 
-**Use your preferred IDE**
+### 2. Configure Environment Variables
+Create a `.env.production` file for deployment or `.env.local` for development:
+```env
+VITE_API_URL=https://your-backend-api.com
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+### 3. Run Development Server
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### 4. Build for Production
+```bash
+npm run build
+```
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Production Readiness
+The frontend has been sanitized for production:
+- 🛡️ **No Hardcoded Links**: All API calls use environment variables.
+- 🧹 **Cleanup**: All development-only tools and "setup-demo" routes have been removed.
+- ⚡ **Optimized**: Ready for deployment on Vercel, Netlify, or Render.
 
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/88e1c9ac-1089-4716-bae0-c4bd919eaae8) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+---
+Part of the AQUA Guardian Ecosystem.
