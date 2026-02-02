@@ -11,7 +11,6 @@ import { toast } from 'sonner';
 interface LeaderboardUser {
     user_id: string;
     name: string;
-    total_nfts: number;
     reports_verified: number;
     cleanups_completed: number;
     role: string;
@@ -75,12 +74,6 @@ const Leaderboard = () => {
                                         <h3 className="font-bold text-xl">{user.name || 'Anonymous'}</h3>
                                         <p className="text-xs text-muted-foreground uppercase tracking-widest">{user.role}</p>
                                     </div>
-                                    <div className="flex justify-center gap-4 text-sm font-medium">
-                                        <div className="flex flex-col items-center">
-                                            <span className="text-2xl text-primary">{user.total_nfts}</span>
-                                            <span className="text-[10px] text-muted-foreground uppercase">NFTs</span>
-                                        </div>
-                                    </div>
                                 </CardContent>
                             </Card>
                         ))}
@@ -99,14 +92,13 @@ const Leaderboard = () => {
                                         <TableHead>User</TableHead>
                                         <TableHead className="text-center">Reports Verified</TableHead>
                                         <TableHead className="text-center">Cleanups</TableHead>
-                                        <TableHead className="text-right font-bold">Total NFTs</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
                                     {loading ? (
                                         <TableRow><TableCell colSpan={5} className="text-center py-10">Loading heroes...</TableCell></TableRow>
                                     ) : users.length === 0 ? (
-                                        <TableRow><TableCell colSpan={5} className="text-center py-10 text-muted-foreground">Be the first hero to appear here!</TableCell></TableRow>
+                                        <TableRow><TableCell colSpan={4} className="text-center py-10 text-muted-foreground">Be the first hero to appear here!</TableCell></TableRow>
                                     ) : (
                                         users.map((user, index) => (
                                             <TableRow key={user.user_id} className={index < 3 ? 'bg-muted/30 font-medium' : ''}>
@@ -125,12 +117,6 @@ const Leaderboard = () => {
                                                 </TableCell>
                                                 <TableCell className="text-center">{user.reports_verified}</TableCell>
                                                 <TableCell className="text-center">{user.cleanups_completed}</TableCell>
-                                                <TableCell className="text-right">
-                                                    <div className="flex items-center justify-end gap-2 text-primary">
-                                                        <Star className="h-4 w-4 fill-primary" />
-                                                        <span className="font-bold">{user.total_nfts}</span>
-                                                    </div>
-                                                </TableCell>
                                             </TableRow>
                                         ))
                                     )}

@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Upload, X, Check, Camera } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import axios from 'axios';
+import api from '@/services/api';
 
 interface CleanupUploadDialogProps {
     isOpen: boolean;
@@ -51,12 +51,11 @@ const CleanupUploadDialog: React.FC<CleanupUploadDialogProps> = ({ isOpen, onClo
             formData.append('resolution_notes', comment);
             formData.append('verification_image', selectedFile);
 
-            const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
 
             // Assuming the endpoint accepts status updates with image
             // We might need to adjust this depending on the actual backend implementation
             // For now, using the report update endpoint
-            await axios.put(`${API_URL}/reports/${reportId}/status`, formData, {
+            await api.put(`/reports/${reportId}/status`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 }

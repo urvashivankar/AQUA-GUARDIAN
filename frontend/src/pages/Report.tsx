@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api, { submitReport, fetchUserReports } from '@/services/api';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -23,7 +23,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import FileUploader from '@/components/FileUploader';
 import ReportCard from '@/components/ReportCard';
 import StatusBadge from '@/components/StatusBadge';
-import { submitReport, fetchUserReports } from '@/services/api';
+
 import CaseCommunication from '@/components/CaseCommunication';
 import { useEffect } from 'react';
 import { XCircle } from 'lucide-react';
@@ -74,7 +74,6 @@ const Report = () => {
   const [isJoiningCleanup, setIsJoiningCleanup] = useState(false);
   const [activeCleanup, setActiveCleanup] = useState<any>(null);
 
-  const API_BASE_URL = "http://127.0.0.1:8000";
 
   // Fetch cleanup action details when a report is selected
   useEffect(() => {
@@ -87,7 +86,7 @@ const Report = () => {
 
   const fetchCleanupDetails = async (reportId: string) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/cleanup/active`);
+      const response = await api.get('/cleanup/active');
       const cleanup = response.data.find((c: any) => c.report_id === reportId);
       setActiveCleanup(cleanup);
     } catch (error) {
@@ -111,7 +110,7 @@ const Report = () => {
       formData.append("user_id", user.id);
       formData.append("role", "Citizen");
 
-      await axios.post(`${API_BASE_URL}/cleanup/${activeCleanup.id}/join`, formData);
+      await api.post(`/cleanup/${activeCleanup.id}/join`, formData);
 
       toast({
         title: "Success",
@@ -150,7 +149,7 @@ const Report = () => {
 
       if (reportId) {
         try {
-          const res = await axios.get(`${API_BASE_URL}/reports/${reportId}`);
+          const res = await api.get(`/reports/${reportId}`);
           const r = res.data;
 
           let severityLabel: 'Low' | 'Medium' | 'High' | 'Critical' = 'Medium';

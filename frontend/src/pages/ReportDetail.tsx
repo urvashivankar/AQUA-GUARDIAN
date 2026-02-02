@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, MapPin, Calendar, Shield } from 'lucide-react';
 import CaseCommunication from '@/components/CaseCommunication';
-import axios from 'axios';
+import api from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
 
 const ReportDetail = () => {
@@ -21,8 +21,7 @@ const ReportDetail = () => {
 
     const loadReport = async () => {
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
-            const response = await axios.get(`${API_URL}/reports/${id}`);
+            const response = await api.get(`/reports/${id}`);
             setReport(response.data);
         } catch (error) {
             console.error('Error loading report:', error);

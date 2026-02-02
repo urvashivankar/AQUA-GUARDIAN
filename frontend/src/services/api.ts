@@ -213,34 +213,8 @@ export const fetchAllReports = async () => {
         const response = await api.get('/reports');
         return response.data;
     } catch (error) {
-        console.warn("Using mock data for all reports");
-        return [
-            {
-                id: '1',
-                location: 'Mumbai Harbor',
-                type: 'Oil Spill',
-                severity: 8,
-                status: 'Verified',
-                description: 'Large oil slick visible near dock 4.',
-                created_at: new Date().toISOString(),
-                latitude: 18.944,
-                longitude: 72.825,
-                photo_url: 'https://images.unsplash.com/photo-1605218430790-2c7009477fb4'
-            },
-            {
-                id: '2',
-                location: 'Juhu Beach',
-                type: 'Plastic Pollution',
-                severity: 5,
-                status: 'Awaiting Verification',
-                description: 'Pile of plastic waste after festival.',
-                created_at: new Date().toISOString(),
-                latitude: 19.0988,
-                longitude: 72.8258,
-                photo_url: 'https://images.unsplash.com/photo-1618477461853-5f8dd37a544d',
-                verification_image: 'https://images.unsplash.com/photo-1595278069441-2cf29f8005a4' // Mock after photo
-            }
-        ];
+        console.error("Error fetching all reports:", error);
+        return [];
     }
 };
 

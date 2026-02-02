@@ -13,6 +13,7 @@ const MarineImpact = () => {
   const [impactData, setImpactData] = useState<any[]>([]);
   const [aiPredictions, setAiPredictions] = useState<any[]>([]);
   const [pollutionSources, setPollutionSources] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [ecosystemHealth, setEcosystemHealth] = useState<any>({
     water_quality: 0,
     biodiversity: 0,
@@ -32,6 +33,7 @@ const MarineImpact = () => {
   // Fetch marine impact data
   useEffect(() => {
     const loadData = async () => {
+      setIsLoading(true);
       try {
         const data = await fetchMarineImpactMetrics();
         setImpactData(data.species_impact || []);
@@ -44,26 +46,10 @@ const MarineImpact = () => {
           conservation_effort: 0
         });
       } catch (error) {
-        console.warn('Backend unavailable, using simulated data for Marine Impact');
-        // Simulated Marine Data
-        setImpactData([
-          { species: "Irrawaddy Dolphin", conservationStatus: "Endangered", currentPopulation: 145, projectedChange: 5, threats: ["Net Entanglement"] },
-          { species: "Olive Ridley Turtle", conservationStatus: "Vulnerable", currentPopulation: 12000, projectedChange: -2, threats: ["Coastal Development"] }
-        ]);
-        setAiPredictions([
-          { timeframe: "Next Month", severity: "High", confidence: 88, prediction: "Algal bloom predicted in northern sector." },
-          { timeframe: "6 Months", severity: "Moderate", confidence: 75, prediction: "Microplastic density expected to stabilize." }
-        ]);
-        setPollutionSources([
-          { source: "Industrial Runoff", impact: 65, trend: "Decreasing" },
-          { source: "Urban Waste", impact: 80, trend: "Increasing" }
-        ]);
-        setEcosystemHealth({
-          water_quality: 72,
-          biodiversity: 65,
-          pollution_level: 45,
-          conservation_effort: 80
-        });
+        console.error('Error loading Marine Impact data:', error);
+        // Error state handled by empty initializations
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -93,7 +79,15 @@ const MarineImpact = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8">
+    <div className={`container mx-auto px-4 py-8 space-y-8 transition-opacity duration-500 ${isLoading ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
+      {isLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/20 backdrop-blur-sm">
+          <div className="flex flex-col items-center space-y-4">
+            <div className="h-12 w-12 border-4 border-ocean-primary border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-ocean-light font-medium animate-pulse">Analyzing Ecosystem Data...</p>
+          </div>
+        </div>
+      )}
       {/* Header */}
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold text-foreground">Marine Impact Analysis</h1>

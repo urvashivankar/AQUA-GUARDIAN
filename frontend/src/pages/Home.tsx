@@ -14,33 +14,29 @@ const Home = () => {
   const features = [
     {
       icon: <BarChart3 className="h-8 w-8 text-ocean-primary" />,
-      title: "Real-time Monitoring",
-      description: "Track water quality parameters with live data and AI-powered insights"
+      title: "AI-Powered Analysis",
+      description: "Instant pollution detection and severity assessment using advanced computer vision"
     },
     {
       icon: <MapPin className="h-8 w-8 text-accent" />,
-      title: "Pollution Reporting",
-      description: "Report pollution incidents with location tracking and photo evidence"
+      title: "Smart Reporting",
+      description: "Submit pollution incidents with GPS coordinates and high-res photo evidence for faster response"
+    },
+    {
+      icon: <Users className="h-8 w-8 text-ocean-light" />,
+      title: "Community Action",
+      description: "Mobilize local cleanup drives and track volunteer impact through verified organization campaigns"
     },
     {
       icon: <Shield className="h-8 w-8 text-success" />,
-      title: "NFT Water Adoption",
-      description: "Adopt and protect water bodies through blockchain-based ownership"
-    },
-    {
-      icon: <Fish className="h-8 w-8 text-ocean-light" />,
-      title: "Marine Impact Analysis",
-      description: "AI predictions of pollution effects on marine life and ecosystems"
+      title: "Secure Verification",
+      description: "Transparent report validation by NGOs and Government agencies ensuring accountability"
     }
   ];
 
 
 
-  const alertStatus = [
-    { location: "Mumbai Harbor", status: "danger", value: "Critical", icon: <AlertTriangle className="h-4 w-4" /> },
-    { location: "Ganges Delta", status: "warning", value: "Warning", icon: <Eye className="h-4 w-4" /> },
-    { location: "Chilika Lake", status: "safe", value: "Safe", icon: <CheckCircle className="h-4 w-4" /> },
-  ];
+  const alertStatus = [];
 
   return (
     <div className="min-h-screen">
@@ -106,11 +102,6 @@ const Home = () => {
                       Community Action
                     </Button>
                   </Link>
-                  <Link to="/how-to-use" className="w-full sm:w-auto">
-                    <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-6 md:py-4 border-ocean-primary text-ocean-light hover:bg-ocean-primary/10">
-                      Learn More
-                    </Button>
-                  </Link>
                 </>
               )}
             </div>
@@ -134,40 +125,19 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Real-time Alerts */}
+      {/* Real-time Alerts - Hidden in production until connected 
       <section className="py-16 bg-card/50 backdrop-blur-sm">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-foreground mb-4">Live Water Quality Alerts</h2>
             <p className="text-muted-foreground">Real-time monitoring across protected water bodies</p>
           </div>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {alertStatus.map((alert, index) => (
-              <Card key={index} className="ocean-card">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-semibold text-foreground">{alert.location}</h3>
-                    {alert.icon}
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Badge
-                      variant={alert.status === 'danger' ? 'destructive' : alert.status === 'warning' ? 'secondary' : 'default'}
-                      className={
-                        alert.status === 'safe' ? 'bg-success text-success-foreground' :
-                          alert.status === 'warning' ? 'bg-warning text-warning-foreground' : ''
-                      }
-                    >
-                      {alert.value}
-                    </Badge>
-                    <span className="text-sm text-muted-foreground">Last updated: 2 min ago</span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            <p className="col-span-3 text-center text-muted-foreground">No active alerts in your area.</p>
           </div>
         </div>
       </section>
+      */}
 
       {/* Features Section */}
       <section className="py-20">
@@ -201,38 +171,6 @@ const Home = () => {
 
 
 
-      {/* Before/After Success Story Preview */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-foreground mb-4">Transformation Stories</h2>
-            <p className="text-xl text-muted-foreground">Witness the positive impact of our conservation efforts</p>
-          </div>
-
-          <div className="max-w-4xl mx-auto">
-            <Card className="ocean-card overflow-hidden">
-              <div className="relative">
-                <img
-                  src={beforeAfterImage}
-                  alt="Before and after water restoration"
-                  className="w-full h-64 md:h-96 object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
-                <div className="absolute bottom-6 left-6 right-6">
-                  <h3 className="text-2xl font-bold text-foreground mb-2">Lake Restoration Success</h3>
-                  <p className="text-muted-foreground mb-4">From polluted waters to thriving ecosystem in 18 months</p>
-                  <Link to="/success-stories">
-                    <Button className="wave-animation">
-                      View All Stories
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </Card>
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-ocean-deep via-card to-ocean-deep">

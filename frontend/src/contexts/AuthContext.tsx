@@ -87,7 +87,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         role: role,
         reportsSubmitted: 0, // Will be updated by fetchUserStats
         cleanUpsJoined: 0,
-        nftsAdopted: 0,
         createdAt: profile?.created_at || sbUser.created_at,
         location: profile?.location || 'India',
       };
@@ -109,7 +108,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         role: 'Citizen',
         reportsSubmitted: 0,
         cleanUpsJoined: 0,
-        nftsAdopted: 0,
       });
     }
   };

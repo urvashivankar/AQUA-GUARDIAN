@@ -7,13 +7,11 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { MapPin, Users, CheckCircle, Clock, ArrowRight, ShieldCheck, UserCircle, PlusCircle, Megaphone } from 'lucide-react';
-import axios from 'axios';
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
-import { createCleanupCampaign } from '@/services/api';
+import api, { createCleanupCampaign } from '@/services/api';
 
-const API_BASE_URL = "http://127.0.0.1:8000";
 
 interface CleanupAction {
     id: string;
@@ -55,7 +53,7 @@ const CommunityActivities = () => {
 
     const fetchActivities = async () => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/cleanup/active`);
+            const response = await api.get('/cleanup/active');
             setActivities(response.data);
         } catch (error) {
             console.error("Error fetching activities:", error);
@@ -120,11 +118,7 @@ const CommunityActivities = () => {
             const formData = new FormData();
             formData.append("role", user.role);
 
-            await axios.post(`${API_BASE_URL}/cleanup/${cleanupId}/join`, formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+            await api.post(`/cleanup/${cleanupId}/join`, formData);
 
             toast({
                 title: "Joined Cleanup Action! 🧹",

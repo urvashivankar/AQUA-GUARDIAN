@@ -5,12 +5,11 @@ import { Badge } from '@/components/ui/badge';
 import { AlertOctagon, TrendingUp, Shield, FileText, CheckCircle, Upload, Download, Filter, Map, List, Search, Play, Camera, Clock, MessageSquare } from 'lucide-react';
 import ModernKPICard from '@/components/charts/ModernKPICard';
 import MapComponent, { MapPoint } from '@/components/MapComponent';
-import { fetchGovernmentStats, fetchGovernmentJurisdictionReports } from '@/services/api';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import CleanupUploadDialog from '@/components/dashboard/CleanupUploadDialog';
 import AIRecommendations from '@/components/dashboard/AIRecommendations';
-import axios from 'axios';
+import api, { fetchGovernmentStats, fetchGovernmentJurisdictionReports } from '@/services/api';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 
@@ -104,8 +103,7 @@ const GovernmentDashboard = () => {
         try {
             const formData = new FormData();
             formData.append('status', 'Resolution in Progress');
-            const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
-            await axios.put(`${API_URL}/reports/${reportId}/status`, formData);
+            await api.put(`/reports/${reportId}/status`, formData);
 
             toast({ title: "Status Updated", description: "Cleaning crew dispatched. Report marked as 'In Progress'." });
             loadData();

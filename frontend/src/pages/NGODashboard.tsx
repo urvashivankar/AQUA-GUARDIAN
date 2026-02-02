@@ -5,12 +5,11 @@ import { Badge } from '@/components/ui/badge';
 import { Users, CheckCircle, Shield, MapPin, Megaphone, CheckSquare, XSquare, Download, Calendar, Map as MapIcon, List as ListIcon, Search, History, ArrowRight, Camera, Clock, MessageSquare } from 'lucide-react';
 import ModernKPICard from '@/components/charts/ModernKPICard';
 import MapComponent, { MapPoint } from '@/components/MapComponent';
-import { fetchNGOStats, fetchAllReports } from '@/services/api';
+import api, { fetchNGOStats, fetchAllReports } from '@/services/api';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import axios from 'axios';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import CleanupUploadDialog from '@/components/dashboard/CleanupUploadDialog';
@@ -92,8 +91,7 @@ const NGODashboard = () => {
             formData.append('status', status);
             formData.append('action_note', note);
 
-            const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
-            await axios.put(`${API_URL}/reports/${reportId}/status`, formData);
+            await api.put(`/reports/${reportId}/status`, formData);
 
             toast({
                 title: isApproved ? "Cleanup Verified! ✅" : "Marked as Incomplete ⚠️",
@@ -115,8 +113,7 @@ const NGODashboard = () => {
         try {
             const formData = new FormData();
             formData.append('organization', orgName);
-            const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
-            await axios.post(`${API_URL}/cleanup/${selectedReport.id}/start`, formData);
+            await api.post(`/cleanup/${selectedReport.id}/start`, formData);
 
             toast({
                 title: "Campaign Launched! 🚀",
