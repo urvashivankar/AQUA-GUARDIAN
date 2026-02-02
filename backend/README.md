@@ -48,42 +48,35 @@ pip install -r requirements.txt
 Create a `.env` file in the backend directory with the following:
 
 ```env
+ENVIRONMENT=production
+ALLOWED_ORIGINS=https://your-frontend-domain.com
 SUPABASE_URL=your_supabase_url
 SUPABASE_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_KEY=your_supabase_service_key
+SUPABASE_SECRET_KEY=your_supabase_service_role_key
+GROQ_API_KEY=your_groq_api_key
 ```
 
 ## Running the Server
-
-### Quick Start (Windows)
-
-Simply double-click `start_backend.bat` or run:
-
-```bash
-start_backend.bat
-```
 
 ### Manual Start
 
 **Windows:**
 ```bash
-.venv\Scripts\activate
-python -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+python -m uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
 **Linux/Mac:**
 ```bash
-source .venv/bin/activate
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
 The server will start on `http://localhost:8000`
 
 ## API Documentation
 
-Once the server is running, access the interactive API documentation at:
+Access the interactive API documentation at:
 
-- **Swagger UI**: http://localhost:8000/docs
+- **Swagger UI**: http://localhost:8000/docs (Note: Disabled when `ENVIRONMENT=production`)
 - **ReDoc**: http://localhost:8000/redoc
 
 ## Project Structure
@@ -91,66 +84,25 @@ Once the server is running, access the interactive API documentation at:
 ```
 backend/
 ├── api/              # API route handlers
-│   ├── auth.py       # Authentication endpoints
-│   ├── reports.py    # Pollution report endpoints
-│   ├── dashboard.py  # Dashboard analytics endpoints
-│   ├── ai.py         # AI inference endpoints
-│   ├── cleanup.py    # Cleanup event endpoints
-│   └── rewards.py    # Gamification/rewards endpoints
-├── db/               # Database models and connections
-├── ml/               # Machine learning models
-├── blockchain/       # Blockchain integration
-├── utils/            # Utility functions
-├── main.py           # FastAPI application entry point
-└── requirements.txt  # Python dependencies
+│   ├── auth.py       # Authentication & Security
+│   ├── reports.py    # Pollution reporting logic
+│   ├── dashboard.py  # Analytics & Statistics
+│   └── ...           # Rewards, Cleanup, Notifications
+├── db/               # Database migrations and Supabase client
+├── ml/               # AI inference (Groq Vision)
+├── blockchain/       # Web3 & Smart Contract integration
+├── middleware/       # Security, Logging & Rate limiting
+├── utils/            # Shared utility functions
+└── main.py           # FastAPI entry point
 ```
 
-## API Endpoints
+## Initialization Scripts
 
-### Authentication
-- `POST /auth/register` - Register new user
-- `POST /auth/login` - User login
-
-### Reports
-- `POST /reports/` - Submit pollution report
-- `GET /reports/` - Get all reports
-- `GET /reports/{id}` - Get specific report
-- `POST /reports/{id}/verify` - Verify report
-
-### Dashboard
-- `GET /dashboard/stats` - Get dashboard statistics
-- `GET /dashboard/water-quality` - Get latest water quality data
-- `GET /dashboard/water-quality-history` - Get historical water quality
-- `GET /dashboard/reports/timeline` - Get reports timeline
-- `GET /dashboard/reports/by-type` - Get reports by pollution type
-- `GET /dashboard/reports/by-status` - Get reports by status
-- `GET /dashboard/reports/geographic-heatmap` - Get geographic distribution
-- `GET /dashboard/reports/severity-distribution` - Get severity distribution
-- `GET /dashboard/marine-impact/metrics` - Get marine impact metrics
-
-## Troubleshooting
-
-### Import Errors
-
-If you encounter import errors, ensure all subdirectories have `__init__.py` files:
-- `api/__init__.py`
-- `db/__init__.py`
-- `ml/__init__.py`
-- `utils/__init__.py`
-- `blockchain/__init__.py`
-
-### Port Already in Use
-
-If port 8000 is already in use, change the port in the startup command:
-
-```bash
-python -m uvicorn main:app --host 0.0.0.0 --port 8001 --reload
-```
-
-Don't forget to update the frontend `.env` file to match:
-```
-VITE_API_URL=http://localhost:8001
-```
+For first-time setup, use these essential scripts in order:
+1. `python scripts/run_migrations.py`: Prepare database schema.
+2. `python scripts/admin_setup.py`: Initialize admin configurations.
+3. `python scripts/seed_jurisdictions.py`: Setup geographic routing.
+4. `python scripts/apply_rls.py`: Enable security policies.
 
 ### Database Connection Issues
 
