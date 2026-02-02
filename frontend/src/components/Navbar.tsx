@@ -4,7 +4,6 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, User, LogOut, Droplets } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link } from 'react-router-dom';
-import aquaLogo from '@/assets/aqua-guardian-logo.png';
 
 const Navbar = () => {
   const { user, logout, isAuthenticated } = useAuth();
@@ -32,12 +31,35 @@ const Navbar = () => {
     <nav className="ocean-card border-b sticky top-0 z-50 backdrop-blur-lg animate-fade-in">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
-            <div className="bg-ocean-primary/10 p-2 rounded-xl group-hover:bg-ocean-primary/20 transition-colors">
-              <Droplets className="h-6 w-6 text-ocean-primary" />
+            <div className="relative flex items-center justify-center">
+              <div className="absolute inset-0 bg-ocean-primary/20 blur-lg rounded-full group-hover:bg-ocean-primary/30 transition-all duration-500"></div>
+              <div className="relative bg-gradient-to-br from-ocean-primary/20 to-ocean-light/10 p-2 rounded-xl border border-ocean-primary/20 group-hover:border-ocean-primary/40 transition-all duration-300 backdrop-blur-sm">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="text-ocean-primary group-hover:scale-110 transition-transform duration-500"
+                >
+                  <path
+                    d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M12 17C13.6569 17 15 15.6569 15 14C15 12.3431 12 9 12 9C12 9 9 12.3431 9 14C9 15.6569 10.3431 17 12 17Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
             </div>
-            <span className="text-xl font-bold text-ocean-light tracking-tight">Aqua Guardian</span>
+            <span className="text-xl font-bold text-ocean-light tracking-tight group-hover:text-white transition-colors">
+              Aqua <span className="text-ocean-primary">Guardian</span>
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
