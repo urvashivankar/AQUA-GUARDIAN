@@ -146,7 +146,29 @@ Use these accounts to explore the different user perspectives:
 
 ---
 
-##  License
+---
+
+## Future Scope
+
+### **Augmented Reality (AR) Integration**
+- **On-Site Visualization**: Empower citizens to view historical pollution data and projected restoration outcomes through AR overlays at report sites.
+- **Interactive Educational Modules**: AR-driven marine life discovery for schools and local communities.
+
+### **Stakeholder Recognition (NFT Adoption)**
+- **Verifiable Impact Badges**: Implementation of a non-transferable NFT system for NGOs and high-contributing citizens as immutable proof of environmental impact.
+- **Adopt-a-Lake Program**: Blockchain-verified sponsorship for corporate and community-led restoration projects.
+
+---
+
+## Current Limitations
+
+- **Image Dependency**: The accuracy of the Vision AI (Maverick) is significantly dependent on lighting conditions and the quality of the uploaded photo.
+- **Human-in-the-Loop**: Case resolution currently requires manual verification by an NGO auditor to ensure cleanup quality, which may introduce delays.
+- **GPS Precision**: Accurate hotspot mapping depends on the precision of the user's device GPS at the time of reporting.
+
+---
+
+## License
 Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
